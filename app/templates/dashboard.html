@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ app_name }}</title>
+
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/static/apple-icon-180x180.png" />
+<meta name="theme-color" content="#0d1220" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Theme tokens ─────────────────────────────────────────── */
+    :root, [data-theme="dark"] {
+      --bg: #0d1220;            /* deep console navy */
+      --bg-grid: rgba(122, 143, 255, .05);
+      --surface: #151c2e;
+      --surface-2: #1b2438;
+      --line: #27314a;
+      --text: #e8ecf6;
+      --text-dim: #8d97b2;
+      --accent: #4fd1c5;        /* agent teal */
+      --accent-ink: #0d1220;
+      --accent-soft: rgba(79, 209, 197, .12);
+      --warn: #f0a35e;          /* overdue amber */
+      --warn-soft: rgba(240, 163, 94, .12);
+      --danger: #f07e7e;
+      --ok: #7ee2a8;
+      --glow: 0 0 18px rgba(79, 209, 197, .18);
+      color-scheme: dark;
+    }
+    [data-theme="light"] {
+      --bg: #f3f5fa;
+      --bg-grid: rgba(28, 44, 90, .05);
+      --surface: #ffffff;
+      --surface-2: #eef1f8;
+      --line: #d9dfec;
+      --text: #18203a;
+      --text-dim: #5d6782;
+      --accent: #0f9d92;
+      --accent-ink: #ffffff;
+      --accent-soft: rgba(15, 157, 146, .1);
+      --warn: #c4742a;
+      --warn-soft: rgba(196, 116, 42, .1);
+      --danger: #c44b4b;
+      --ok: #1f9d5b;
+      --glow: none;
+      color-scheme: light;
+    }
+
+    /* ── Base ─────────────────────────────────────────────────── */
+    html { filter: brightness(var(--user-brightness, 1)); transition: filter .15s; }
+    body {
+      background: var(--bg);
+      background-image: radial-gradient(var(--bg-grid) 1px, transparent 1px);
+      background-size: 26px 26px;
+      color: var(--text);
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+      transition: background-color .25s, color .25s;
+      min-height: 100vh;
+    }
+    h1, .num { font-family: "Space Grotesk", sans-serif; letter-spacing: -0.02em; }
+    .mono { font-family: "IBM Plex Mono", monospace; }
+
+    /* ── Masthead + agent rail ────────────────────────────────── */
+    /* ── Masthead + agent rail ────────────────────────────────── */
+.masthead { background: var(--surface); border-bottom: 1px solid var(--line); }
+.logo-mark {
+  width: 52px; height: 52px; border-radius: 13px;
+  background: var(--surface-2); border: 1px solid var(--line);
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.logo-mark svg { width: 36px; height: 36px; display: block; }
+.app-title { font-size: 1.7rem; font-weight: 700; margin: 0; line-height: 1.1; }
+.stack-line {
+  display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .3rem;
+  font-family: "IBM Plex Mono", monospace; font-size: .72rem;
+  letter-spacing: .07em; color: var(--text-dim);
+}
+.stack-item { display: inline-flex; align-items: center; gap: .38rem; }
+.stack-item i { color: var(--accent); font-size: .85rem; }
+
+.agent-rail { display: flex; flex-wrap: wrap; gap: .55rem; }
+.agent-chip {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: 9px; padding: .4rem .75rem;
+  font-size: .7rem; color: var(--text);
+  font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .07em;
+  transition: border-color .15s, transform .15s;
+}
+.agent-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
+.agent-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2.4s infinite; }
+.agent-chip:nth-child(2) .agent-dot { animation-delay: .3s } .agent-chip:nth-child(3) .agent-dot { animation-delay: .6s }
+.agent-chip:nth-child(4) .agent-dot { animation-delay: .9s } .agent-chip:nth-child(5) .agent-dot { animation-delay: 1.2s }
+.agent-chip:nth-child(6) .agent-dot { animation-delay: 1.5s }
+@keyframes pulse { 0%,100%{opacity:.35} 50%{opacity:1} }
+@media (prefers-reduced-motion: reduce) { .agent-dot { animation: none; opacity: 1 } }
+
+    /* ── Theme controls ───────────────────────────────────────── */
+    .ctl-pill {
+      background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px;
+      padding: .35rem .8rem; display: inline-flex; align-items: center; gap: .55rem;
+    }
+    .theme-btn { background: none; border: none; color: var(--text); font-size: 1rem; line-height: 1; padding: 0; }
+    input[type="range"].brightness {
+      width: 110px; accent-color: var(--accent); cursor: pointer;
+    }
+    .ctl-label { font-size: .7rem; color: var(--text-dim); font-family: "IBM Plex Mono", monospace; min-width: 2.2em; text-align: right; }
+
+    /* ── Cards ────────────────────────────────────────────────── */
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+      position: relative; overflow: hidden; transition: transform .15s, border-color .15s;
+    }
+    .stat-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .stat-card::after {
+      content: ""; position: absolute; inset: auto 0 0 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: .6;
+    }
+    .stat-card .num { font-size: 2.2rem; font-weight: 700; line-height: 1; }
+    .stat-card small { color: var(--text-dim); font-family: "IBM Plex Mono", monospace; font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; }
+    .stat-card.hot { border-color: var(--warn); }
+    .stat-card.hot::after { background: linear-gradient(90deg, var(--warn), transparent); }
+    .stat-card.hot .num { color: var(--warn); }
+
+    /* ── Recommendation panel ─────────────────────────────────── */
+    .reco-panel {
+      background: linear-gradient(135deg, var(--accent-soft), transparent 60%), var(--surface);
+      border: 1px solid var(--line); border-left: 3px solid var(--accent);
+      border-radius: 14px; box-shadow: var(--glow);
+    }
+    .reco-tag { font-family: "IBM Plex Mono", monospace; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+    .thinking { color: var(--text-dim); }
+    .thinking::after { content: "▋"; animation: blink 1s steps(2) infinite; color: var(--accent); }
+    @keyframes blink { 50% { opacity: 0 } }
+
+    /* ── Panels / forms / table ───────────────────────────────── */
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+    .form-control, .form-select, .input-group-text {
+      background: var(--surface-2); border-color: var(--line); color: var(--text);
+    }
+    .form-control::placeholder { color: var(--text-dim); }
+    .form-control:focus, .form-select:focus { background: var(--surface-2); color: var(--text); border-color: var(--accent); box-shadow: 0 0 0 .2rem var(--accent-soft); }
+    .form-label { color: var(--text-dim); font-size: .73rem; font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .06em; }
+    .btn-agent { background: var(--accent); color: var(--accent-ink); font-weight: 600; border: none; }
+    .btn-agent:hover { filter: brightness(1.1); color: var(--accent-ink); }
+    .table { --bs-table-bg: transparent; --bs-table-color: var(--text); border-color: var(--line); margin: 0; }
+    .table thead th { font-family: "IBM Plex Mono", monospace; font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--text-dim); border-color: var(--line); }
+    .table td { border-color: var(--line); }
+    .priority-pill { font-family: "IBM Plex Mono", monospace; font-size: .66rem; font-weight: 600; border-radius: 999px; padding: .22rem .6rem; letter-spacing: .05em; }
+    .p-urgent { background: rgba(240,126,126,.16); color: var(--danger); }
+    .p-high   { background: var(--warn-soft); color: var(--warn); }
+    .p-medium { background: rgba(122,143,255,.14); color: #94a6ff; }
+    [data-theme="light"] .p-medium { color: #4456c7; }
+    .p-low    { background: var(--accent-soft); color: var(--accent); }
+    .status-dot { width: .55rem; height: .55rem; border-radius: 50%; display: inline-block; margin-right: .45rem; }
+    .s-pending { background: var(--text-dim) } .s-in_progress { background: #7a8fff } .s-completed { background: var(--ok) }
+    .overdue-row td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
+    .completed-row { opacity: .5 } .completed-row .task-title { text-decoration: line-through }
+    .empty-state { color: var(--text-dim) }
+    .id-cell { color: var(--text-dim); font-family: "IBM Plex Mono", monospace; font-size: .8rem; }
+    .btn-outline-success { --bs-btn-color: var(--ok); --bs-btn-border-color: var(--ok); }
+    .btn-outline-danger { --bs-btn-color: var(--danger); --bs-btn-border-color: var(--danger); }
+    .btn-outline-secondary { --bs-btn-color: var(--text-dim); --bs-btn-border-color: var(--line); }
+    .form-check-input { background-color: var(--surface-2); border-color: var(--line); }
+    .form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
+    .form-check-label { color: var(--text-dim); }
+  </style>
+</head>
+<body>
+  <header class="masthead py-3 mb-4">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3">
+  <div class="logo-mark">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M 14 52 L 14 14 L 32 38 L 50 14 L 50 52"
+            fill="none" stroke="#9aa3b2" stroke-width="4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 18 37 L 46 33"
+            fill="none" stroke="#b08055" stroke-width="3.6"
+            stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div>
+    <h1 class="app-title">{{ app_name }}</h1>
+    <div class="stack-line">
+      <span class="stack-item"><i class="bi bi-stars"></i>GEMINI 2.5 FLASH</span>
+      <span class="stack-item"><i class="bi bi-database"></i>SQLITE</span>
+      <span class="stack-item"><i class="bi bi-telegram"></i>TELEGRAM</span>
+    </div>
+  </div>
+</div>
+
+        <!-- Theme + brightness controls -->
+        <div class="d-flex align-items-center gap-2">
+          <div class="ctl-pill" title="Adjust brightness (0–100)">
+            <i class="bi bi-brightness-high" style="color:var(--text-dim);font-size:.9rem"></i>
+            <input type="range" class="brightness" id="brightnessRange" min="0" max="100" value="50"
+                   aria-label="Brightness" oninput="setBrightness(this.value)" />
+            <span class="ctl-label" id="brightnessVal">50</span>
+          </div>
+          <div class="ctl-pill">
+            <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Switch light / dark theme" aria-label="Switch theme">
+              <i class="bi bi-moon-stars" id="themeIcon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent rail -->
+      <div class="agent-rail mt-3">
+        <span class="agent-chip"><span class="agent-dot"></span>Orchestrator</span>
+        <span class="agent-chip"><span class="agent-dot"></span>Task</span>
+        <span class="agent-chip"><span class="agent-dot"></span>Priority</span>
+        <span class="agent-chip"><span class="agent-dot"></span>Recommendation</span>
+        <span class="agent-chip"><span class="agent-dot"></span>Memory</span>
+        <span class="agent-chip"><span class="agent-dot"></span>Reminder</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pb-5">
+    <!-- Statistics cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md"><div class="stat-card p-3"><div class="num" id="statTotal">–</div><small>Total tasks</small></div></div>
+      <div class="col-6 col-md"><div class="stat-card p-3"><div class="num" id="statPending">–</div><small>Pending</small></div></div>
+      <div class="col-6 col-md"><div class="stat-card p-3"><div class="num" id="statProgress">–</div><small>In progress</small></div></div>
+      <div class="col-6 col-md"><div class="stat-card p-3"><div class="num" id="statDone" style="color:var(--ok)">–</div><small>Completed</small></div></div>
+      <div class="col-12 col-md"><div class="stat-card hot p-3"><div class="num" id="statOverdue">–</div><small>Overdue</small></div></div>
+    </div>
+
+    <!-- Recommendation panel -->
+    <div class="reco-panel p-3 mb-4 d-flex gap-3 align-items-start">
+      <i class="bi bi-stars fs-4" style="color:var(--accent)"></i>
+      <div class="flex-grow-1">
+        <div class="reco-tag mb-1">Recommendation Agent</div>
+        <p class="m-0 thinking" id="recoText">Analyzing your queue</p>
+      </div>
+      <button class="btn btn-sm btn-outline-secondary" onclick="loadRecommendation()" title="Ask the agent again"><i class="bi bi-arrow-clockwise"></i></button>
+    </div>
+
+    <!-- Add task -->
+    <div class="panel p-3 mb-4">
+      <div class="row g-2 align-items-end">
+        <div class="col-12 col-md-4"><label class="form-label">New task</label>
+          <input id="newTitle" class="form-control" placeholder="e.g. Submit Q2 report" /></div>
+        <div class="col-12 col-md-3"><label class="form-label">Due date</label>
+          <input id="newDue" type="datetime-local" class="form-control" /></div>
+        <div class="col-6 col-md-3"><label class="form-label">Priority</label>
+          <select id="newPriority" class="form-select">
+            <option value="">Let the Priority Agent decide</option>
+            <option value="low">Low</option><option value="medium">Medium</option>
+            <option value="high">High</option><option value="urgent">Urgent</option>
+          </select></div>
+        <div class="col-6 col-md-2 d-grid">
+          <button class="btn btn-agent" onclick="addTask()"><i class="bi bi-plus-lg"></i> Add task</button></div>
+      </div>
+    </div>
+
+    <!-- Search + filters -->
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <div class="input-group" style="max-width: 320px">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input id="searchBox" class="form-control" placeholder="Search title or description…" oninput="debouncedLoad()" />
+      </div>
+      <select id="filterStatus" class="form-select w-auto" onchange="loadTasks()">
+        <option value="">All statuses</option><option value="pending">Pending</option>
+        <option value="in_progress">In progress</option><option value="completed">Completed</option>
+      </select>
+      <select id="filterPriority" class="form-select w-auto" onchange="loadTasks()">
+        <option value="">All priorities</option><option value="urgent">Urgent</option>
+        <option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option>
+      </select>
+      <div class="form-check form-switch align-self-center ms-1">
+        <input class="form-check-input" type="checkbox" id="filterOverdue" onchange="loadTasks()" />
+        <label class="form-check-label small" for="filterOverdue">Overdue only</label>
+      </div>
+    </div>
+
+    <!-- Task table -->
+    <div class="panel overflow-hidden">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead><tr>
+            <th>#</th><th>Task</th><th>Priority</th><th>Status</th><th>Due</th><th class="text-end">Actions</th>
+          </tr></thead>
+          <tbody id="taskBody"><tr><td colspan="6" class="text-center py-4 empty-state">Loading tasks…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /* ── Theme & brightness (persisted in localStorage) ──────── */
+    const root = document.documentElement;
+
+    function applyTheme(theme) {
+      root.setAttribute('data-theme', theme);
+      document.getElementById('themeIcon').className = theme === 'dark' ? 'bi bi-moon-stars' : 'bi bi-sun';
+      localStorage.setItem('tm-theme', theme);
+    }
+    function toggleTheme() {
+      applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
+    function setBrightness(v) {
+      v = Math.max(0, Math.min(100, Number(v)));
+      // 0 → 0.55 (dim), 50 → 1.0 (normal), 100 → 1.45 (bright)
+      root.style.setProperty('--user-brightness', (0.55 + (v / 100) * 0.9).toFixed(3));
+      document.getElementById('brightnessVal').textContent = v;
+      document.getElementById('brightnessRange').value = v;
+      localStorage.setItem('tm-brightness', v);
+    }
+    applyTheme(localStorage.getItem('tm-theme') || 'dark');
+    setBrightness(localStorage.getItem('tm-brightness') ?? 50);
+
+    /* ── Data layer (unchanged behaviour) ─────────────────────── */
+    const fmtDue = (iso) => iso ? new Date(iso).toLocaleString(undefined, {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : '—';
+    const esc = (s) => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let debounceTimer;
+    const debouncedLoad = () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(loadTasks, 300); };
+
+    async function loadStats() {
+      try {
+        const s = await (await fetch('/api/tasks/stats')).json();
+        statTotal.textContent = s.total; statPending.textContent = s.pending;
+        statProgress.textContent = s.in_progress; statDone.textContent = s.completed;
+        statOverdue.textContent = s.overdue;
+      } catch { statTotal.textContent = '!'; }
+    }
+
+    async function loadRecommendation() {
+      recoText.textContent = 'Analyzing your queue';
+      recoText.classList.add('thinking');
+      try {
+        const d = await (await fetch('/api/tasks/recommendations')).json();
+        recoText.classList.remove('thinking');
+        recoText.textContent = d.recommendation;
+      } catch {
+        recoText.classList.remove('thinking');
+        recoText.textContent = 'Recommendation unavailable right now.';
+      }
+    }
+
+    async function loadTasks() {
+      const params = new URLSearchParams();
+      if (searchBox.value.trim()) params.set('search', searchBox.value.trim());
+      if (filterStatus.value) params.set('status', filterStatus.value);
+      if (filterPriority.value) params.set('priority', filterPriority.value);
+      if (filterOverdue.checked) params.set('overdue', 'true');
+      try {
+        const tasks = await (await fetch('/api/tasks?' + params)).json();
+        taskBody.innerHTML = tasks.length ? tasks.map(rowHtml).join('')
+          : '<tr><td colspan="6" class="text-center py-4 empty-state">No tasks match. Add one above to get started.</td></tr>';
+      } catch {
+        taskBody.innerHTML = '<tr><td colspan="6" class="text-center py-4 empty-state">Could not load tasks. Check the server logs.</td></tr>';
+      }
+    }
+
+    function rowHtml(t) {
+      const rowCls = t.status === 'completed' ? 'completed-row' : (t.is_overdue ? 'overdue-row' : '');
+      const statusLabel = {pending:'Pending', in_progress:'In progress', completed:'Completed'}[t.status];
+      return `<tr class="${rowCls}">
+        <td class="id-cell">${t.id}</td>
+        <td><span class="task-title fw-semibold">${esc(t.title)}</span>
+            ${t.description ? `<br><small style="color:var(--text-dim)">${esc(t.description)}</small>` : ''}</td>
+        <td><span class="priority-pill p-${t.priority}">${t.priority.toUpperCase()}</span></td>
+        <td><span class="status-dot s-${t.status}"></span>${statusLabel}</td>
+        <td>${fmtDue(t.due_date)}${t.is_overdue ? ' <span class="badge" style="background:var(--warn-soft);color:var(--warn)">OVERDUE</span>' : ''}</td>
+        <td class="text-end">
+          ${t.status !== 'completed' ? `<button class="btn btn-sm btn-outline-success me-1" title="Mark complete" onclick="completeTask(${t.id})"><i class="bi bi-check-lg"></i></button>` : ''}
+          <button class="btn btn-sm btn-outline-danger" title="Delete task" onclick="deleteTask(${t.id})"><i class="bi bi-trash"></i></button>
+        </td></tr>`;
+    }
+
+    async function addTask() {
+      const title = newTitle.value.trim();
+      if (!title) { newTitle.focus(); return; }
+      const body = { title };
+      if (newDue.value) body.due_date = new Date(newDue.value).toISOString();
+      if (newPriority.value) body.priority = newPriority.value;
+      await fetch('/api/tasks', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+      newTitle.value = ''; newDue.value = ''; newPriority.value = '';
+      refreshAll();
+    }
+
+    async function completeTask(id) { await fetch(`/api/tasks/${id}/complete`, {method:'POST'}); refreshAll(); }
+    async function deleteTask(id) { await fetch(`/api/tasks/${id}`, {method:'DELETE'}); refreshAll(); }
+    function refreshAll() { loadTasks(); loadStats(); loadRecommendation(); }
+
+    newTitle.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+    refreshAll();
+    setInterval(loadStats, 60000);
+  </script>
+</body>
+</html>

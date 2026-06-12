@@ -1,0 +1,35 @@
+# Render.com blueprint — deploy with "New + → Blueprint" pointing at this repo.
+services:
+  - type: web
+    name: multi-agent-task-manager
+    runtime: python
+    plan: starter           # paid plan recommended: free instances sleep, which stops the bot & reminders
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:                   # persist the SQLite file across deploys/restarts
+      name: task-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:////var/data/tasks.db
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false         # set in the Render dashboard (secret)
+      - key: GEMINI_API_KEY
+        sync: false         # set in the Render dashboard (secret)
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: DAILY_REMINDER_HOUR
+        value: "8"
+      - key: DAILY_REMINDER_MINUTE
+        value: "30"
+      - key: TIMEZONE
+        value: Asia/Kolkata
+      - key: LOG_LEVEL
+        value: INFO
