@@ -327,7 +327,10 @@
     setBrightness(localStorage.getItem('tm-brightness') ?? 50);
 
     /* ── Data layer (unchanged behaviour) ─────────────────────── */
-    const fmtDue = (iso) => iso ? new Date(iso).toLocaleString(undefined, {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : '—';
+    // The API returns naive UTC timestamps (no 'Z'). Append 'Z' so the
+    // browser parses them as UTC and converts to the viewer's local zone.
+    const asUTC = (iso) => /[zZ]|[+-]\d{2}:?\d{2}$/.test(iso) ? iso : iso + 'Z';
+    const fmtDue = (iso) => iso ? new Date(asUTC(iso)).toLocaleString(undefined, {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:true}) : '—';
     const esc = (s) => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     let debounceTimer;
     const debouncedLoad = () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(loadTasks, 300); };
