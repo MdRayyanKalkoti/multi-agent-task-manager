@@ -182,3 +182,43 @@ See **[architecture.md](architecture.md)** — agent interactions, data flow, co
 <div align="center">
 Built by <b>Rayyan</b> · FastAPI · Gemini 2.5 Flash · Telegram
 </div>
+
+## 🚀 Advanced Features
+
+Beyond core CRUD, the system ships with production-minded capabilities:
+
+### Real-time live dashboard
+The dashboard auto-syncs every 5 seconds, so a task added from **Telegram** (or any device) appears on the web UI **without a manual refresh**. Implemented as smart polling that:
+- redraws the table **only when data actually changes** (no flicker),
+- **pauses while you type** in search or open a filter, so it never disrupts input,
+- **sleeps when the tab is hidden** to save bandwidth, and resumes instantly on return,
+- shows a pulsing **LIVE** indicator in the header.
+
+> Side effect on Render's free tier: an open dashboard keeps the instance (and the bot) awake via its polls.
+
+### Multi-agent intelligence
+Six specialised agents collaborate behind one entry point:
+- **Orchestrator** — parses natural language into structured intent (Gemini), with a deterministic regex fallback.
+- **Priority Agent** — heuristic scoring (keywords + deadline proximity) first, Gemini only for ambiguous cases — fast and cheap.
+- **Recommendation Agent** — ranks open tasks by priority weight + deadline pressure + staleness, then phrases it as coaching.
+- **Memory Agent** — per-chat conversation memory so references like *"mark that one done"* resolve correctly.
+
+### Graceful degradation
+No Gemini key? Deterministic parsers and templates take over automatically. No bot token? The API and dashboard still run. The app **never hard-fails** on a missing integration — every external call is wrapped and logged.
+
+### Proactive reminders (scheduler)
+APScheduler drives a **daily digest** at your configured hour and an **hourly overdue sweep**, delivered straight to Telegram — fully decoupled from the transport via a `send(chat_id, text)` callable.
+
+### Deployment-ready
+- `render.yaml` blueprint (web service + persistent disk + health check)
+- `Dockerfile` for container deploys
+- `runtime.txt` pins the Python version
+- Single process hosts API · dashboard · bot · scheduler — one service, zero orchestration overhead
+
+## 🗺️ Roadmap
+
+- [ ] User accounts & multi-tenancy (promote `chat_id` → `User` table)
+- [ ] Postgres option for horizontal scaling (swap `DATABASE_URL`)
+- [ ] Recurring tasks & custom reminder schedules
+- [ ] WebSocket push as an alternative to polling
+- [ ] Task categories / tags and saved filter views
