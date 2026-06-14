@@ -202,6 +202,10 @@
 
         <!-- Theme + brightness controls -->
         <div class="d-flex align-items-center gap-2">
+          <div class="ctl-pill" title="Dashboard updates automatically every few seconds">
+            <span id="liveDot" style="width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block;animation:pulse 2s infinite"></span>
+            <span class="ctl-label" style="min-width:auto">LIVE</span>
+          </div>
           <div class="ctl-pill" title="Adjust brightness (0–100)">
             <i class="bi bi-brightness-high" style="color:var(--text-dim);font-size:.9rem"></i>
             <input type="range" class="brightness" id="brightnessRange" min="0" max="100" value="50"
@@ -350,7 +354,9 @@
       }
     }
 
-    async function loadTasks() {
+    let lastTasksHash = null;   // remember last render to avoid needless redraws
+
+    async function loadTasks(force = false) {
       const params = new URLSearchParams();
       if (searchBox.value.trim()) params.set('search', searchBox.value.trim());
       if (filterStatus.value) params.set('status', filterStatus.value);
@@ -358,6 +364,10 @@
       if (filterOverdue.checked) params.set('overdue', 'true');
       try {
         const tasks = await (await fetch('/api/tasks?' + params)).json();
+        // Only touch the DOM if the data actually changed (prevents flicker on live polls)
+        const hash = JSON.stringify(tasks.map(t => [t.id, t.title, t.status, t.priority, t.due_date]));
+        if (!force && hash === lastTasksHash) return;
+        lastTasksHash = hash;
         taskBody.innerHTML = tasks.length ? tasks.map(rowHtml).join('')
           : '<tr><td colspan="6" class="text-center py-4 empty-state">No tasks match. Add one above to get started.</td></tr>';
       } catch {
@@ -394,11 +404,38 @@
 
     async function completeTask(id) { await fetch(`/api/tasks/${id}/complete`, {method:'POST'}); refreshAll(); }
     async function deleteTask(id) { await fetch(`/api/tasks/${id}`, {method:'DELETE'}); refreshAll(); }
-    function refreshAll() { loadTasks(); loadStats(); loadRecommendation(); }
+    function refreshAll() { loadTasks(true); loadStats(); loadRecommendation(); }
 
     newTitle.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
     refreshAll();
-    setInterval(loadStats, 60000);
+
+    /* ── Live auto-refresh ─────────────────────────────────────
+       Polls every 5s so tasks added from Telegram (or another
+       device) appear without a manual reload. Pauses while the
+       user is actively typing/selecting so it never disrupts them,
+       and stops when the browser tab is hidden to save resources. */
+    const LIVE_INTERVAL_MS = 5000;
+
+    function userIsInteracting() {
+      const el = document.activeElement;
+      return el && (el === searchBox || el === newTitle || el === newDue ||
+                    el === filterStatus || el === filterPriority);
+    }
+
+    async function liveTick() {
+      if (document.hidden || userIsInteracting()) return;
+      await Promise.all([loadTasks(), loadStats()]);
+      setLiveState(true);
+    }
+
+    function setLiveState(ok) {
+      const dot = document.getElementById('liveDot');
+      if (dot) dot.style.background = ok ? 'var(--ok)' : 'var(--warn)';
+    }
+
+    setInterval(liveTick, LIVE_INTERVAL_MS);
+    // Refresh immediately when the user returns to the tab
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) liveTick(); });
   </script>
 </body>
 </html>
