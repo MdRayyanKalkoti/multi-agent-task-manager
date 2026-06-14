@@ -69,39 +69,38 @@
     .mono { font-family: "IBM Plex Mono", monospace; }
 
     /* ── Masthead + agent rail ────────────────────────────────── */
-    /* ── Masthead + agent rail ────────────────────────────────── */
-.masthead { background: var(--surface); border-bottom: 1px solid var(--line); }
-.logo-mark {
-  width: 52px; height: 52px; border-radius: 13px;
-  background: var(--surface-2); border: 1px solid var(--line);
-  display: grid; place-items: center; flex-shrink: 0;
-}
-.logo-mark svg { width: 36px; height: 36px; display: block; }
-.app-title { font-size: 1.7rem; font-weight: 700; margin: 0; line-height: 1.1; }
-.stack-line {
-  display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .3rem;
-  font-family: "IBM Plex Mono", monospace; font-size: .72rem;
-  letter-spacing: .07em; color: var(--text-dim);
-}
-.stack-item { display: inline-flex; align-items: center; gap: .38rem; }
-.stack-item i { color: var(--accent); font-size: .85rem; }
+    .masthead { background: var(--surface); border-bottom: 1px solid var(--line); }
+    .logo-mark {
+      width: 52px; height: 52px; border-radius: 13px;
+      background: var(--surface-2); border: 1px solid var(--line);
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .logo-mark svg { width: 36px; height: 36px; display: block; }
+    .app-title { font-size: 1.7rem; font-weight: 700; margin: 0; line-height: 1.1; }
+    .stack-line {
+      display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .3rem;
+      font-family: "IBM Plex Mono", monospace; font-size: .72rem;
+      letter-spacing: .07em; color: var(--text-dim);
+    }
+    .stack-item { display: inline-flex; align-items: center; gap: .38rem; }
+    .stack-item i { color: var(--accent); font-size: .85rem; }
 
-.agent-rail { display: flex; flex-wrap: wrap; gap: .55rem; }
-.agent-chip {
-  display: inline-flex; align-items: center; gap: .5rem;
-  background: var(--surface-2); border: 1px solid var(--line);
-  border-radius: 9px; padding: .4rem .75rem;
-  font-size: .7rem; color: var(--text);
-  font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .07em;
-  transition: border-color .15s, transform .15s;
-}
-.agent-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
-.agent-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2.4s infinite; }
-.agent-chip:nth-child(2) .agent-dot { animation-delay: .3s } .agent-chip:nth-child(3) .agent-dot { animation-delay: .6s }
-.agent-chip:nth-child(4) .agent-dot { animation-delay: .9s } .agent-chip:nth-child(5) .agent-dot { animation-delay: 1.2s }
-.agent-chip:nth-child(6) .agent-dot { animation-delay: 1.5s }
-@keyframes pulse { 0%,100%{opacity:.35} 50%{opacity:1} }
-@media (prefers-reduced-motion: reduce) { .agent-dot { animation: none; opacity: 1 } }
+    .agent-rail { display: flex; flex-wrap: wrap; gap: .55rem; }
+    .agent-chip {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--surface-2); border: 1px solid var(--line);
+      border-radius: 9px; padding: .4rem .75rem;
+      font-size: .7rem; color: var(--text);
+      font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .07em;
+      transition: border-color .15s, transform .15s;
+    }
+    .agent-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .agent-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2.4s infinite; }
+    .agent-chip:nth-child(2) .agent-dot { animation-delay: .3s } .agent-chip:nth-child(3) .agent-dot { animation-delay: .6s }
+    .agent-chip:nth-child(4) .agent-dot { animation-delay: .9s } .agent-chip:nth-child(5) .agent-dot { animation-delay: 1.2s }
+    .agent-chip:nth-child(6) .agent-dot { animation-delay: 1.5s }
+    @keyframes pulse { 0%,100%{opacity:.35} 50%{opacity:1} }
+    @media (prefers-reduced-motion: reduce) { .agent-dot { animation: none; opacity: 1 } }
 
     /* ── Theme controls ───────────────────────────────────────── */
     .ctl-pill {
@@ -150,13 +149,15 @@
     .form-control::placeholder { color: var(--text-dim); }
     .form-control:focus, .form-select:focus { background: var(--surface-2); color: var(--text); border-color: var(--accent); box-shadow: 0 0 0 .2rem var(--accent-soft); }
     .form-label { color: var(--text-dim); font-size: .73rem; font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .06em; }
-    .form-label .req { color: var(--danger); margin-left: .15rem; }
-select.form-select {
-  -webkit-appearance: none; -moz-appearance: none; appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16' fill='none' stroke='%238d97b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right .8rem center;
-  padding-right: 2.2rem;
-}
+    .form-label .req { color: var(--danger); margin-left: .15rem; font-size: 1.1em; font-weight: 700; }
+    .field-error { color: var(--danger); font-size: .72rem; margin-top: .25rem; min-height: 1em; font-family: "IBM Plex Mono", monospace; }
+    .form-control.is-invalid, .form-select.is-invalid { border-color: var(--danger); box-shadow: 0 0 0 .15rem rgba(240,126,126,.18); }
+    select.form-select {
+      -webkit-appearance: none; -moz-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16' fill='none' stroke='%238d97b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right .8rem center;
+      padding-right: 2.2rem;
+    }
     .btn-agent { background: var(--accent); color: var(--accent-ink); font-weight: 600; border: none; }
     .btn-agent:hover { filter: brightness(1.1); color: var(--accent-ink); }
     .table { --bs-table-bg: transparent; --bs-table-color: var(--text); border-color: var(--line); margin: 0; }
@@ -187,25 +188,25 @@ select.form-select {
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
         <div class="d-flex align-items-center gap-3">
-  <div class="logo-mark">
-    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M 14 52 L 14 14 L 32 38 L 50 14 L 50 52"
-            fill="none" stroke="#9aa3b2" stroke-width="4"
-            stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M 18 37 L 46 33"
-            fill="none" stroke="#b08055" stroke-width="3.6"
-            stroke-linecap="round"/>
-    </svg>
-  </div>
-  <div>
-    <h1 class="app-title">{{ app_name }}</h1>
-    <div class="stack-line">
-      <span class="stack-item"><i class="bi bi-stars"></i>GEMINI 2.5 FLASH</span>
-      <span class="stack-item"><i class="bi bi-database"></i>SQLITE</span>
-      <span class="stack-item"><i class="bi bi-telegram"></i>TELEGRAM</span>
-    </div>
-  </div>
-</div>
+          <div class="logo-mark">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M 14 52 L 14 14 L 32 38 L 50 14 L 50 52"
+                    fill="none" stroke="#9aa3b2" stroke-width="4"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 18 37 L 46 33"
+                    fill="none" stroke="#b08055" stroke-width="3.6"
+                    stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="app-title">{{ app_name }}</h1>
+            <div class="stack-line">
+              <span class="stack-item"><i class="bi bi-stars"></i>GEMINI 2.5 FLASH</span>
+              <span class="stack-item"><i class="bi bi-database"></i>SQLITE</span>
+              <span class="stack-item"><i class="bi bi-telegram"></i>TELEGRAM</span>
+            </div>
+          </div>
+        </div>
 
         <!-- Theme + brightness controls -->
         <div class="d-flex align-items-center gap-2">
@@ -261,18 +262,22 @@ select.form-select {
 
     <!-- Add task -->
     <div class="panel p-3 mb-4">
-      <div class="row g-2 align-items-end">
+      <div class="row g-2 align-items-start">
         <div class="col-12 col-md-4"><label class="form-label">New task<span class="req">*</span></label>
-          <input id="newTitle" class="form-control" placeholder="e.g. Submit Q2 report" /></div>
-        <div class="col-12 col-md-3"><label class="form-label">Due date</label>
-          <input id="newDue" type="datetime-local" class="form-control" /></div>
-        <div class="col-6 col-md-3"><label class="form-label">Priority</label>
-          <select id="newPriority" class="form-select">
-            <option value="">Let the Priority Agent decide</option>
+          <input id="newTitle" class="form-control" placeholder="e.g. Submit Q2 report" oninput="clearFieldError('newTitle')" />
+          <div class="field-error" id="err-newTitle"></div></div>
+        <div class="col-12 col-md-3"><label class="form-label">Due date<span class="req">*</span></label>
+          <input id="newDue" type="datetime-local" class="form-control" onchange="clearFieldError('newDue')" />
+          <div class="field-error" id="err-newDue"></div></div>
+        <div class="col-6 col-md-3"><label class="form-label">Priority<span class="req">*</span></label>
+          <select id="newPriority" class="form-select" onchange="clearFieldError('newPriority')">
+            <option value="">Select priority…</option>
             <option value="low">Low</option><option value="medium">Medium</option>
             <option value="high">High</option><option value="urgent">Urgent</option>
-          </select></div>
+          </select>
+          <div class="field-error" id="err-newPriority"></div></div>
         <div class="col-6 col-md-2 d-grid">
+          <label class="form-label d-none d-md-block">&nbsp;</label>
           <button class="btn btn-agent" onclick="addTask()"><i class="bi bi-plus-lg"></i> Add task</button></div>
       </div>
     </div>
@@ -333,7 +338,7 @@ select.form-select {
     applyTheme(localStorage.getItem('tm-theme') || 'dark');
     setBrightness(localStorage.getItem('tm-brightness') ?? 50);
 
-    /* ── Data layer (unchanged behaviour) ─────────────────────── */
+    /* ── Data layer ───────────────────────────────────────────── */
     // The API returns naive UTC timestamps (no 'Z'). Append 'Z' so the
     // browser parses them as UTC and converts to the viewer's local zone.
     const asUTC = (iso) => /[zZ]|[+-]\d{2}:?\d{2}$/.test(iso) ? iso : iso + 'Z';
@@ -401,14 +406,34 @@ select.form-select {
         </td></tr>`;
     }
 
+    function clearFieldError(id) {
+      document.getElementById(id).classList.remove('is-invalid');
+      document.getElementById('err-' + id).textContent = '';
+    }
+    function setFieldError(id, msg) {
+      document.getElementById(id).classList.add('is-invalid');
+      document.getElementById('err-' + id).textContent = msg;
+    }
+
     async function addTask() {
+      // All three fields are required — validate before submitting.
       const title = newTitle.value.trim();
-      if (!title) { newTitle.focus(); return; }
-      const body = { title };
-      if (newDue.value) body.due_date = new Date(newDue.value).toISOString();
-      if (newPriority.value) body.priority = newPriority.value;
+      let firstBad = null;
+      ['newTitle','newDue','newPriority'].forEach(clearFieldError);
+
+      if (!title) { setFieldError('newTitle', 'Please enter a task name.'); firstBad ??= newTitle; }
+      if (!newDue.value) { setFieldError('newDue', 'Please choose a due date.'); firstBad ??= newDue; }
+      if (!newPriority.value) { setFieldError('newPriority', 'Please select a priority.'); firstBad ??= newPriority; }
+      if (firstBad) { firstBad.focus(); return; }   // block submit, focus first empty field
+
+      const body = {
+        title,
+        due_date: new Date(newDue.value).toISOString(),
+        priority: newPriority.value,
+      };
       await fetch('/api/tasks', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
       newTitle.value = ''; newDue.value = ''; newPriority.value = '';
+      ['newTitle','newDue','newPriority'].forEach(clearFieldError);
       refreshAll();
     }
 
